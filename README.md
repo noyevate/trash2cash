@@ -1,7 +1,6 @@
 # ♻️ Trash2Cash
 
-Trash2Cash is a **waste management and recycling app** that gamifies the process of recycling.  
-Users can log their waste, earn points, and redeem rewards — turning trash into cash!  
+Trash2Cash is a **waste management and recycling app** that Empowers a sustainable future by connecting Waste Generators with Waste Recyclers, facilitating efficient and responsible waste management practices that benefit both the environment and the economy.  
 
 Built with **Flutter** during the DigiHive Hackathon 🚀.
 
