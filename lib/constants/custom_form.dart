@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomForm extends StatelessWidget {
   const CustomForm({
@@ -19,36 +20,37 @@ class CustomForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: TextInputType.emailAddress,
-      obscureText: obscureText,
-      
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(limit ?? 50)
-      ],
-      decoration: InputDecoration(
-        hintText: hintText,
+    return SizedBox(
+      height: 60.h,
+      child: TextFormField(
+        controller: controller,
+        keyboardType: TextInputType.emailAddress,
+        obscureText: obscureText,
         
-        hintStyle: TextStyle(
-          color: Colors.grey
-        ),
-        filled: true,
-        fillColor: darkTheme ? Colors.black45 : Colors.grey.shade200,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            width: 0,
-            style: BorderStyle.none
+        
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(limit ?? 50)
+        ],
+        decoration: InputDecoration(
+          hintText: hintText,
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          hintStyle: TextStyle(
+            color: Color(0xff49454F)
           ),
+          filled: true,
+          fillColor: darkTheme ? Colors.black45 : Colors.grey.shade200,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.r),
+            borderSide: BorderSide.none,
+          ),
+          prefixIcon:prefixIcon, //?? Icon(Icons.person, color: darkTheme ? Colors.amber.shade400 : Colors.grey,) ,
+          suffixIcon: suffixIcon
+          
         ),
-        prefixIcon:prefixIcon, //?? Icon(Icons.person, color: darkTheme ? Colors.amber.shade400 : Colors.grey,) ,
-        suffixIcon: suffixIcon
-        
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: validator,
+        onChanged: onChanged,
       ),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: validator,
-      onChanged: onChanged,
     );
   }
 }

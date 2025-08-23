@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/login_page.dart';
@@ -22,7 +23,7 @@ class AuthSelection extends StatelessWidget {
                   title: "Turn Your",
                   style: TextStyle(color: Colors.black, fontSize: 35.sp, fontWeight: FontWeight.bold)),
             ),
-          5.l,
+          // 5.l,
             RText(
                 title: "Trash Into Cash",
                 style: TextStyle(color: Colors.black, fontSize: 35.sp, fontWeight: FontWeight.bold)),
@@ -40,7 +41,7 @@ class AuthSelection extends StatelessWidget {
                 style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w400)),
 
 
-            30.l,
+            25.l,
             Image.asset("images/onboarding_1.png"),
             40.l,
             Padding(
@@ -53,20 +54,16 @@ class AuthSelection extends StatelessWidget {
                         builder: (BuildContext context) => RegisterPage()),
                   );
                 },
-                child: Material(
-                  elevation: 3,
-                  borderRadius: BorderRadius.circular(10.r),
-                  child: Container(
-                    height: 50.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Color(0xff2E7D32),
-                        borderRadius: BorderRadius.circular(10.r)),
-                    child: Center(
-                      child: RText(
-                        title: "Get Starterted",
-                        style: TextStyle(fontSize: 20.sp, color: Colors.white),
-                      ),
+                child: Container(
+                  height: 50.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Tcolor.PrimaryGreen,
+                      borderRadius: BorderRadius.circular(30.r)),
+                  child: Center(
+                    child: RText(
+                      title: "Get Started",
+                      style: TextStyle(fontSize: 20.sp, color: Colors.white),
                     ),
                   ),
                 ),
@@ -83,23 +80,18 @@ class AuthSelection extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (BuildContext context) => LoginPage()));
                 },
-                child: Material(
-                  elevation: 3,
-                  borderRadius: BorderRadius.circular(10.r),
-
-                  child: Container(
-                    height: 50.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        // color: Color(0xff2E7D32),
-                        borderRadius: BorderRadius.circular(10.r),
-                        border: Border.all()
-                      ),
-                    child: Center(
-                      child: RText(
-                        title: "Get Starterted",
-                        style: TextStyle(fontSize: 20.sp, color: Colors.white),
-                      ),
+                child: Container(
+                  height: 50.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      // color: Color(0xff2E7D32),
+                      borderRadius: BorderRadius.circular(30.r),
+                      border: Border.all(color: Tcolor.PrimaryGreen)
+                    ),
+                  child: Center(
+                    child: RText(
+                      title: "login",
+                      style: TextStyle(fontSize: 20.sp, color: Tcolor.PrimaryGreen),
                     ),
                   ),
                 ),
