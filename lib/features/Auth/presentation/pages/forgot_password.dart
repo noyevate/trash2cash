@@ -6,6 +6,7 @@ import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/custom_form.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
+import 'package:trash2cash/features/Auth/presentation/pages/check_inbox.dart';
 
 class ForgotPassword extends StatelessWidget {
   const ForgotPassword({super.key});
@@ -18,7 +19,7 @@ class ForgotPassword extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w),
+          padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -57,7 +58,7 @@ class ForgotPassword extends StatelessWidget {
               CustomForm(
                 darkTheme: false,
                 prefixIcon: null,
-                hintText: "Enter your name",
+                hintText: "Enter your email",
                 controller: emailTextEditingController,
                 validator: (text) {
                   if (text == null || text.isEmpty) {
@@ -79,11 +80,11 @@ class ForgotPassword extends StatelessWidget {
 
               GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (BuildContext context) => RegisterPage()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => CheckInbox(email: emailTextEditingController.text,)),
+                  );
           
                   print(emailTextEditingController.text);
                 },
