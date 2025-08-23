@@ -48,7 +48,7 @@ class AuthSelection extends StatelessWidget {
               padding: EdgeInsets.only(left: 20.w, right: 20.w),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) => RegisterPage()),
@@ -75,7 +75,7 @@ class AuthSelection extends StatelessWidget {
               padding: EdgeInsets.only(left: 20.w, right: 20.w),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => LoginPage()));

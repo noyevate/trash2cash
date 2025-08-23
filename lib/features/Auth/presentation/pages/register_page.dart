@@ -16,6 +16,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  // ignore: prefer_final_fields
   bool _passwordVisible = false;
 
   @override
