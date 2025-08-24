@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomForm extends StatelessWidget {
   const CustomForm({
     super.key,
-    required this.darkTheme, this.onChanged, this.hintText, this.prefixIcon, this.validator, this.obscureText = false, this.limit, this.suffixIcon, required this.controller
+    required this.darkTheme, this.onChanged, this.hintText, this.prefixIcon, this.validator, this.obscureText = false, this.limit, this.suffixIcon, required this.controller, this.color, this.readOnly
   });
   final Function(String)? onChanged;
   final String? hintText;
@@ -15,8 +15,10 @@ class CustomForm extends StatelessWidget {
   final int? limit;
   final Widget? suffixIcon;
   final TextEditingController controller;
+  final Color? color;
 
   final bool darkTheme;
+  final bool? readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class CustomForm extends StatelessWidget {
         controller: controller,
         keyboardType: TextInputType.emailAddress,
         obscureText: obscureText,
+        readOnly: readOnly ?? false,
         
         
         inputFormatters: [
@@ -35,7 +38,7 @@ class CustomForm extends StatelessWidget {
           hintText: hintText,
           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           hintStyle: TextStyle(
-            color: Color(0xff49454F),
+            color: Color(0xff49454F) ?? color,
             fontSize: 15.sp
           ),
           filled: true,

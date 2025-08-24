@@ -5,6 +5,7 @@ import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/login_with_mail.dart';
+import 'package:trash2cash/features/home_user/presentation/pages/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -67,11 +68,11 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.only(left: 20.w, right: 20.w),
               child: GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (BuildContext context) => RegisterPage()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => Home()),
+                  );
                 },
                 child: Container(
                   height: 60.h,

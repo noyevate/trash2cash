@@ -15,109 +15,114 @@ class ForgotPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController emailTextEditingController =
         TextEditingController();
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Icon(Ionicons.arrow_back_circle_outline)),
-              ),
-              Center(
-                    child: RText(
-                          title: "Reset\nYour Password",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 35.sp,
-                              fontWeight: FontWeight.bold)),
-                  ),
-          
-              10.l,
-                Center(
-                  child: RText(
-                      title: "we’ll help you get back into your account",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w400)),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Icon(Ionicons.arrow_back_circle_outline)),
                 ),
-              
-              20.l,
-              RText(
-                  title: "Email",
-                  style: TextStyle(color: Colors.black, fontSize: 15.sp)),
-              CustomForm(
-                darkTheme: false,
-                prefixIcon: null,
-                hintText: "Enter your email",
-                controller: emailTextEditingController,
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return "email can\'t be empty";
-                  }
-                  if (text.length < 2) {
-                    return "Please enter a valid email";
-                  }
-                  if (EmailValidator.validate(text) == true) {
-                    return null;
-                  }
-                  if (text.length > 50) {
-                    return "email can\'t be more than 50 characters";
-                  }
-                  return null;
-                },
-              ),
-              10.l,
-
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => CheckInbox(email: emailTextEditingController.text,)),
-                  );
-          
-                  print(emailTextEditingController.text);
-                },
-                child: Container(
-                  height: 60.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Tcolor.PrimaryGreen,
-                      borderRadius: BorderRadius.circular(30.r)),
-                  child: Center(
+                Center(
+                      child: RText(
+                            title: "Reset\nYour Password",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.bold)),
+                    ),
+            
+                10.l,
+                  Center(
                     child: RText(
-                      title: "Send",
-                      style: TextStyle(
-                          fontSize: 20.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400),
+                        title: "we’ll help you get back into your account",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w400)),
+                  ),
+                
+                20.l,
+                RText(
+                    title: "Email",
+                    style: TextStyle(color: Colors.black, fontSize: 15.sp)),
+                CustomForm(
+                  darkTheme: false,
+                  prefixIcon: null,
+                  hintText: "Enter your email",
+                  controller: emailTextEditingController,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return "email can\'t be empty";
+                    }
+                    if (text.length < 2) {
+                      return "Please enter a valid email";
+                    }
+                    if (EmailValidator.validate(text) == true) {
+                      return null;
+                    }
+                    if (text.length > 50) {
+                      return "email can\'t be more than 50 characters";
+                    }
+                    return null;
+                  },
+                ),
+                10.l,
+      
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => CheckInbox(email: emailTextEditingController.text,)),
+                    );
+            
+                    print(emailTextEditingController.text);
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Tcolor.PrimaryGreen,
+                        borderRadius: BorderRadius.circular(30.r)),
+                    child: Center(
+                      child: RText(
+                        title: "Send",
+                        style: TextStyle(
+                            fontSize: 20.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              10.l,
-
-              Center(
-                    child: RText(
-                          title: "You’ll receive a link to create a new\n password",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w400)),
-                  ),
-              
-            ],
+                10.l,
+      
+                Center(
+                      child: RText(
+                            title: "You’ll receive a link to create a new\n password",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w400)),
+                    ),
+                
+              ],
+            ),
           ),
         ),
       ),
