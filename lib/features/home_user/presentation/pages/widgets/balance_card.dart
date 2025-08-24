@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
@@ -9,6 +10,10 @@ class BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final box = GetStorage();
+
+    final walletBal = box.read("walletBal");
+    final points = box.read("point");
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -29,7 +34,7 @@ class BalanceCard extends StatelessWidget {
                   ),
           
                    Text(
-                     "₦60,000",
+                     walletBal != null ? "₦$walletBal" : "₦0.0",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24.sp,
@@ -47,7 +52,7 @@ class BalanceCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                    RText(
-                    title: "60 pts",
+                    title: points != null ? '$points pts' : "0 pts",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,

@@ -5,7 +5,9 @@ import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
 
 class CustomAppbar extends StatelessWidget {
-  const CustomAppbar({super.key});
+  const CustomAppbar({super.key, required this.name});
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class CustomAppbar extends StatelessWidget {
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w500)),
                                 RText(
-                            title: "Emmanuel",
+                            title: name,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 15.sp,

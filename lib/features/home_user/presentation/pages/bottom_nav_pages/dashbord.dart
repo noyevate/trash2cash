@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/widgets/balance_card.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/widgets/custom_appbar.dart';
@@ -10,6 +11,7 @@ class Dashbord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final box = GetStorage();
     return Scaffold(
       backgroundColor: Colors.white,
       // appBar: PreferredSize(preferredSize: Size.fromHeight(550.h), child: CustomAppbar()),
@@ -18,7 +20,7 @@ class Dashbord extends StatelessWidget {
         padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h),
         child: Column(
           children: [
-            CustomAppbar(),
+            CustomAppbar(name: box.read("name") ?? "",),
             20.l,
             BalanceCard(),
 

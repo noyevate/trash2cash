@@ -21,7 +21,7 @@ class CreateListAppbar extends StatelessWidget {
           Row(
             children: [
               IconButton(onPressed: () {
-                
+                Navigator.pop(context);
               }, icon: Icon(Ionicons.arrow_back_circle_outline)),
               RText(title: "Create Your Waste List", style: TextStyle(color: Colors.black, fontSize: 24.sp, fontWeight: FontWeight.w600)),
               
