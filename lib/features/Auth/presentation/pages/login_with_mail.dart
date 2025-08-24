@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +10,8 @@ import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/forgot_password.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/register_page.dart';
+import 'package:trash2cash/features/home_user/presentation/pages/bottom_nav_pages/dashbord.dart';
+import 'package:http/http.dart' as http;
 
 class LoginWithMail extends StatefulWidget {
   const LoginWithMail({super.key});
@@ -23,6 +27,57 @@ class _LoginWithMailState extends State<LoginWithMail> {
         TextEditingController();
     final TextEditingController passwordTextEditingController =
         TextEditingController();
+
+
+        Future<void> login(BuildContext context) async {
+  String email = emailTextEditingController.text.trim();
+  String password = passwordTextEditingController.text.trim();
+
+  if (email.isEmpty || password.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Email and password are required")),
+    );
+    return;
+  }
+
+  try {
+    var url = Uri.parse("https://yourapi.com/login"); // replace with your API endpoint
+    var response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "email": email,
+        "password": password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      // assume your API returns something like {"token": "...", "user": {...}}
+      String token = data["token"];
+
+      // save token locally
+      
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Login successful ✅")),
+      );
+
+      // Navigate to home/dashboard
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Dashbord()));
+    } else {
+      var errorMsg = jsonDecode(response.body)['message'] ?? "Login failed";
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMsg)),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error: $e")),
+    );
+  }
+}
   @override
   Widget build(BuildContext context) {
     

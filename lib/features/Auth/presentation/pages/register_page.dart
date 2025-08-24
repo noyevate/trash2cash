@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/custom_form.dart';
+import 'package:trash2cash/constants/others.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/login_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:trash2cash/features/home_user/presentation/pages/bottom_nav_pages/dashbord.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,11 +21,65 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
+
   // ignore: prefer_final_fields
   bool _passwordVisible = false;
   final TextEditingController nameTextEditingController = TextEditingController();
     final TextEditingController emailTextEditingController = TextEditingController();
     final TextEditingController passwordTextEditingController = TextEditingController();
+
+
+
+    void _register(BuildContext context) async {
+  String name = nameTextEditingController.text.trim();
+  String email = emailTextEditingController.text.trim();
+  String password = passwordTextEditingController.text.trim();
+  print(name);
+  print(email);
+  print(password);
+
+  if (name.isEmpty || email.isEmpty || password.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("All fields are required")),
+    );
+    return;
+  }
+
+  try {
+    var url = Uri.parse("https://$appBaseUrl/auth/register"); 
+    var response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "firstName": name,
+        "email": email,
+        "password": password,
+      }),
+    );
+    print("Status code: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Registration successful ✅")),
+      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Dashbord()));
+    } else {
+      var errorMsg = jsonDecode(response.body)['message'] ?? "Registration failed";
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMsg)),
+      );
+    }
+  } catch (e) {
+    print(e);
+    ScaffoldMessenger.of(context).showSnackBar(
+      
+      SnackBar(content: Text("Error: $e")),
+    );
+  }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -224,11 +283,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 20.l,
                 GestureDetector(
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (BuildContext context) => RegisterPage()),
-                    // );
+                   _register(context);
                 
                     print(passwordTextEditingController.text);
                   },

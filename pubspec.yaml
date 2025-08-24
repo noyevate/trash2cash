@@ -41,6 +41,7 @@ dependencies:
   email_validator: ^3.0.0
   ionicons: ^0.2.2
   fluttertoast: ^8.2.12
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:
