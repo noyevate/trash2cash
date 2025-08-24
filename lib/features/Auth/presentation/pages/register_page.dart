@@ -11,7 +11,7 @@ import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/login_page.dart';
 import 'package:http/http.dart' as http;
-import 'package:trash2cash/features/home_user/presentation/pages/bottom_nav_pages/dashbord.dart';
+import 'package:trash2cash/features/home_user/presentation/pages/home.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -65,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Registration successful ✅")),
       );
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Dashbord()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Home()));
     } else {
       var errorMsg = jsonDecode(response.body)['message'] ?? "Registration failed";
       ScaffoldMessenger.of(context).showSnackBar(
