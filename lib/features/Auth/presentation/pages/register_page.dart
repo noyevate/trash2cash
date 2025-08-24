@@ -18,12 +18,13 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   // ignore: prefer_final_fields
   bool _passwordVisible = false;
+  final TextEditingController nameTextEditingController = TextEditingController();
+    final TextEditingController emailTextEditingController = TextEditingController();
+    final TextEditingController passwordTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameTextEditingController = TextEditingController();
-    final TextEditingController emailTextEditingController = TextEditingController();
-    final TextEditingController passwordTextEditingController = TextEditingController();
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -203,17 +204,17 @@ class _RegisterPageState extends State<RegisterPage> {
               hintText: "Enter password",
               controller: passwordTextEditingController,
               obscureText: !_passwordVisible,
-              // suffixIcon: IconButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       _passwordVisible = !_passwordVisible;
-              //     });
-              //   },
-              //   icon: Icon(
-              //     _passwordVisible ? Icons.visibility : Icons.visibility_off,
-              //     color: Colors.grey,
-              //   ),
-              // ),
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _passwordVisible = !_passwordVisible;
+                  });
+                },
+                icon: Icon(
+                  _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey,
+                ),
+              ),
             ),
             20.l,
             GestureDetector(

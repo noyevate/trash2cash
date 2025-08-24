@@ -9,17 +9,23 @@ import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/forgot_password.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/register_page.dart';
 
-class LoginWithMail extends StatelessWidget {
+class LoginWithMail extends StatefulWidget {
   const LoginWithMail({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // ignore: prefer_final_fields
-    // bool _passwordVisible = false;
+  State<LoginWithMail> createState() => _LoginWithMailState();
+}
+
+class _LoginWithMailState extends State<LoginWithMail> {
+  // ignore: prefer_final_fields
+    bool _passwordVisible = false;
     final TextEditingController emailTextEditingController =
         TextEditingController();
     final TextEditingController passwordTextEditingController =
         TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -96,18 +102,18 @@ class LoginWithMail extends StatelessWidget {
                 prefixIcon: null,
                 hintText: "Enter password",
                 controller: passwordTextEditingController,
-                // obscureText: !_passwordVisible,
-                // suffixIcon: IconButton(
-                //   onPressed: () {
-                //     setState(() {
-                //       _passwordVisible = !_passwordVisible;
-                //     });
-                //   },
-                //   icon: Icon(
-                //     _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                //     color: Colors.grey,
-                //   ),
-                // ),
+                obscureText: !_passwordVisible,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                ),
               ),
               10.l,
               GestureDetector(

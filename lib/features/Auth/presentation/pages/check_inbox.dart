@@ -4,6 +4,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
+import 'package:trash2cash/features/Auth/presentation/pages/sset_new_pass.dart';
 
 class CheckInbox extends StatelessWidget {
   const CheckInbox({super.key, required this.email});
@@ -80,11 +81,11 @@ class CheckInbox extends StatelessWidget {
               10.l,
               GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (BuildContext context) => CheckInbox(email: emailTextEditingController.text,)),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => SsetNewPass()),
+                  );
           
                 },
                 child: Container(

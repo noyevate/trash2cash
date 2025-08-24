@@ -35,7 +35,8 @@ class CustomForm extends StatelessWidget {
           hintText: hintText,
           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           hintStyle: TextStyle(
-            color: Color(0xff49454F)
+            color: Color(0xff49454F),
+            fontSize: 15.sp
           ),
           filled: true,
           fillColor: darkTheme ? Colors.black45 : Colors.grey.shade200,
