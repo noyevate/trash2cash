@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/custom_form.dart';
+import 'package:trash2cash/constants/others.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
+import 'package:trash2cash/constants/utils.dart';
+import 'package:trash2cash/features/home_user/presentation/pages/successful_listing.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/widgets/create_list_appbar.dart';
+import 'package:http/http.dart' as http;
 
 class CreateWasteList extends StatefulWidget {
   const CreateWasteList({super.key});
@@ -20,9 +26,91 @@ class _CreateWasteListState extends State<CreateWasteList> {
     final phoneTextEditingController = TextEditingController();
     final wasteTypeTextEditingController = TextEditingController();
     final wasteUnitTextEditingController = TextEditingController();
+    final wasteWeightTextEditingController = TextEditingController();
 
    final List<String> wasteTypes = ["Plastics", "Iron"];
   String? selectedWaste;
+  File? image;
+
+  Future<void> _uploadWaste(BuildContext context) async {
+  String title = titleTextEditingController.text.trim();
+  String wasteDesc = wasteDescTextEditingController.text.trim();
+  String pickUp = pickupTextEditingController.text.trim();
+  String phone = phoneTextEditingController.text.trim();
+  String wasteType = selectedWaste ?? "PLASTIC"; // dropdown choice
+  int? wasteUnit = int.tryParse(wasteUnitTextEditingController.text.trim());
+double? wasteWeight = double.tryParse(wasteWeightTextEditingController.text.trim());
+
+  if (title.isEmpty ||
+      wasteDesc.isEmpty ||
+      pickUp.isEmpty ||
+      phone.isEmpty ||
+      wasteUnit!.isNaN ||
+      wasteWeight!.isNaN ||
+      image == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Please fill all fields and select an image")),
+    );
+    return;
+  }
+
+  try {
+    
+    var uri = Uri.parse("https://$appBaseUrl"); // change to your endpoint
+
+    var request = http.MultipartRequest("POST", uri);
+
+    // Add fields
+    request.fields["title"] = title;
+    request.fields["description"] = wasteDesc;
+    request.fields["pickupLocation"] = pickUp;
+    request.fields["type"] = wasteType.toUpperCase();
+    request.fields["unit"] = wasteUnit.toString();
+    request.fields["weight"] = wasteWeight.toString(); // you can change to actual value
+    request.fields["contactPhone"] = phone;
+
+    // Add image
+    request.files.add(await http.MultipartFile.fromPath("image", image!.path));
+
+    // If you need token authentication
+    // request.headers["Authorization"] = "Bearer $accessToken";
+
+    var response = await request.send();
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Waste uploaded successfully ✅")),
+      );
+      // clear form
+      titleTextEditingController.clear();
+      wasteDescTextEditingController.clear();
+      pickupTextEditingController.clear();
+      phoneTextEditingController.clear();
+      wasteUnitTextEditingController.clear();
+      image = null;
+    } else {
+      var respStr = await response.stream.bytesToString();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed: $respStr")),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error: $e")),
+    );
+  }
+}
+
+  void selectImage() async {
+    final pickedImage = await pickImage();
+    if (pickedImage != null) {
+      setState(() {
+        image = pickedImage;
+      });
+    }
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     
@@ -145,7 +233,7 @@ class _CreateWasteListState extends State<CreateWasteList> {
                   prefixIcon: null,
                   
                   hintText: "Enter waste unit",
-                  controller: phoneTextEditingController,
+                  controller: wasteWeightTextEditingController,
                   
                 ),
                 5.l,
@@ -153,29 +241,44 @@ class _CreateWasteListState extends State<CreateWasteList> {
                 RText(
                     title: "Upload image",
                     style: TextStyle(color: Colors.black, fontSize: 15.sp, fontWeight: FontWeight.w500)),
-                Container(
+                image != null ?
+                SizedBox(
                   height: 200.h,
-                  width: 500.h,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(20.r)
+                    width: 500.h,
+                    child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.r),
+                                child: Image.file(
+                                  image!,
+                                  fit: BoxFit.cover,
+                                )),
+                ):
+                GestureDetector(
+                  onTap: selectImage,
+                  child: Container(
+                    height: 200.h,
+                    width: 500.h,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(20.r)
+                    ),
+                    child: Center(child: RText(
+                      title: "Upload image",
+                      style: TextStyle(color: Color(0xff49454F), fontSize: 15.sp, fontWeight: FontWeight.w400)),),
                   ),
-                  child: Center(child: RText(
-                    title: "Upload image",
-                    style: TextStyle(color: Color(0xff49454F), fontSize: 15.sp, fontWeight: FontWeight.w400)),),
-                ),
+                )  ,
 
                 10.l,
 
                 GestureDetector(
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (BuildContext context) => RegisterPage()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => SuccessfulListing() )
+                    );
                 
                     // print(passwordTextEditingController.text);
+
                   },
                   child: Container(
                     height: 60.h,

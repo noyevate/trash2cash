@@ -11,50 +11,49 @@ class SuccessfulListing extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Tcolor.PrimaryGreen,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(left: 15.w,right: 15.w, top: 15.h),
-          child: Center(
-            child: Column(
-              children: [
-                RText(
-                    title: "Minister of\nWaste Management",
-                    style: TextStyle(color: Colors.black, fontSize: 15.sp, fontWeight: FontWeight.w500)),
-                RText(
-                    title: "Your listing is now life",
-                    style: TextStyle(color: Colors.black, fontSize: 15.sp, fontWeight: FontWeight.w500)),
-
-                20.l,
-
-                GestureDetector(
-                  onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (BuildContext context) => RegisterPage()),
-                    // );
-                
-                    // print(passwordTextEditingController.text);
-                  },
-                  child: Container(
-                    height: 60.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Tcolor.PrimaryYellow,
-                        borderRadius: BorderRadius.circular(30.r)),
-                    child: Center(
-                      child: RText(
-                        title: "View  in dashboard",
-                        style: TextStyle(
-                            fontSize: 20.sp,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600),
-                      ),
+      body: Padding(
+        padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RText(
+                  title: "Minister of\nWaste Management",
+                  style: TextStyle(color: Colors.white, fontSize: 25.sp, fontWeight: FontWeight.w500), textAlign: TextAlign.center,),
+              RText(
+                  title: "Your listing is now life",
+                  style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w500)),
+              
+              40.l,
+              
+              GestureDetector(
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (BuildContext context) => RegisterPage()),
+                  // );
+              
+                  // print(passwordTextEditingController.text);
+                },
+                child: Container(
+                  height: 60.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Tcolor.PrimaryYellow,
+                      borderRadius: BorderRadius.circular(30.r)),
+                  child: Center(
+                    child: RText(
+                      title: "View  in dashboard",
+                      style: TextStyle(
+                          fontSize: 20.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

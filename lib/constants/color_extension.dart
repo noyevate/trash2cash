@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 class Tcolor {
   static Color get PrimaryGreen => const Color(0xff279B54);
   static Color get SecondaryGreen => const Color(0xff175D32);
+  static Color get tertiaryGreen => const Color(0xff16A34A);
   static Color get PrimaryYellow => const Color(0xffFCCC3E);
   static Color get BorderColor => const Color(0xffD9D9D9);
   static Color get CustomNarBar => const Color(0xffF5F5F5);
+  static Color get SecondaryGreenr => const Color(0xffDCFCE7);
   
 }
+
 
