@@ -4,6 +4,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
+import 'package:trash2cash/constants/format_money.dart';
+import 'package:trash2cash/features/home_user/presentation/pages/withdraw_funds.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({super.key});
@@ -34,7 +36,7 @@ class BalanceCard extends StatelessWidget {
                   ),
           
                    Text(
-                     walletBal != null ? "₦$walletBal" : "₦0.0",
+                     walletBal != null ? "₦${formatMoney(walletBal)}" : "₦0.0",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24.sp,
@@ -61,7 +63,7 @@ class BalanceCard extends StatelessWidget {
 
                   ElevatedButton(
                 onPressed: () {
-                  // Handle withdraw action
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => WithdrawFunds()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Tcolor.PrimaryYellow,

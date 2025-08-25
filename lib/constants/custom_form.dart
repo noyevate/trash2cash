@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomForm extends StatelessWidget {
   const CustomForm({
     super.key,
-    required this.darkTheme, this.onChanged, this.hintText, this.prefixIcon, this.validator, this.obscureText = false, this.limit, this.suffixIcon, required this.controller, this.color, this.readOnly
+    required this.darkTheme, this.onChanged, this.hintText, this.prefixIcon, this.validator, this.obscureText = false, this.limit, this.suffixIcon, this.controller, this.color, this.readOnly
   });
   final Function(String)? onChanged;
   final String? hintText;
@@ -14,7 +14,7 @@ class CustomForm extends StatelessWidget {
   final bool obscureText;
   final int? limit;
   final Widget? suffixIcon;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final Color? color;
 
   final bool darkTheme;

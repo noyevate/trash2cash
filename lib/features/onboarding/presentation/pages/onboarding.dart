@@ -27,7 +27,7 @@ class _OnboardingState extends State<Onboarding> {
   }
 
   redirect() {
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 6), () {
       Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (BuildContext context) => AuthSelection()),

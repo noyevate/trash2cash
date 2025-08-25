@@ -70,9 +70,9 @@ class _LoginWithMailState extends State<LoginWithMail> {
         box.write("accessToken", data["accessToken"]);
         box.write("refreshToken", data["refreshToken"]);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Login successful ✅")),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(content: Text("Login successful ✅")),
+        // );
 
         // Navigate to home/dashboard
         Navigator.pushReplacement(

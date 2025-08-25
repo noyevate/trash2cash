@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 10.h),
         child: CustomBottomNavBar(
           selectedIndex: _selectedIndex,
           onTabSelected: (index) {

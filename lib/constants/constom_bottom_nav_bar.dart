@@ -111,8 +111,8 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // FAB size and cut-out size
-    double fabSize = 50; // default FloatingActionButton size
-    double extraSpace = 40; // make cut-out wider than FAB
+    double fabSize = 50.sp; // default FloatingActionButton size
+    double extraSpace = 40.sp; // make cut-out wider than FAB
     double circleSize = fabSize + extraSpace;
 
     return SizedBox(
@@ -131,13 +131,13 @@ class CustomBottomNavBar extends StatelessWidget {
               bottomLeft: Radius.circular(40),
               bottomRight: Radius.circular(40),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 8,
-                  offset: Offset(0, -2),
-                ),
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.black12,
+              //     blurRadius: 8,
+              //     offset: Offset(0, -2),
+              //   ),
+              // ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -151,12 +151,12 @@ class CustomBottomNavBar extends StatelessWidget {
 
           // Circle cut-out
           Positioned(
-            top: -60,
+            top: -20,
             right: 100,
-            left: MediaQuery.of(context).size.width / 3 - (circleSize /10 ),
+            left: MediaQuery.of(context).size.width / 3 - (20.w /5 ),
             child: Container(
-              width: circleSize,
-              height: circleSize,
+              width: 60.w,
+              height: 60.h,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,

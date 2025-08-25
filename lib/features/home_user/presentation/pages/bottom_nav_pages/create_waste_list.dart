@@ -109,6 +109,26 @@ double? wasteWeight = double.tryParse(wasteWeightTextEditingController.text.trim
       });
     }
   }
+  bool _isLoading = false;
+
+  void _handleTap() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _isLoading = false;
+      });
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SuccessfulListing(),
+        ),
+      );
+    });
+  }
 
   
   @override
@@ -221,7 +241,7 @@ double? wasteWeight = double.tryParse(wasteWeightTextEditingController.text.trim
                   prefixIcon: null,
                   
                   hintText: "Enter waste unit",
-                  controller: phoneTextEditingController,
+                  controller: wasteUnitTextEditingController,
                   
                 ),
                 5.l,
@@ -270,24 +290,22 @@ double? wasteWeight = double.tryParse(wasteWeightTextEditingController.text.trim
                 10.l,
 
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => SuccessfulListing() )
-                    );
-                
-                    // print(passwordTextEditingController.text);
-
-                  },
+                  onTap: _isLoading ? null : _handleTap,
                   child: Container(
                     height: 60.h,
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: Tcolor.PrimaryYellow,
                         borderRadius: BorderRadius.circular(30.r)),
-                    child: Center(
-                      child: RText(
+                    child:  Center(
+                      child: _isLoading ? SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2.5,
+                  ),
+                ): RText(
                         title: "Submit",
                         style: TextStyle(
                             fontSize: 20.sp,

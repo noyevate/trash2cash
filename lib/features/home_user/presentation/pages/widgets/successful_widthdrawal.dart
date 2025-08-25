@@ -5,13 +5,13 @@ import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/home.dart';
 
-class SuccessfulListing extends StatelessWidget {
-  const SuccessfulListing({super.key});
+class SuccessfulWidthdrawal extends StatelessWidget {
+  const SuccessfulWidthdrawal({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Tcolor.PrimaryGreen,
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h),
         child: Center(
@@ -19,11 +19,11 @@ class SuccessfulListing extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               RText(
-                  title: "Minister of\nWaste Management",
-                  style: TextStyle(color: Colors.white, fontSize: 25.sp, fontWeight: FontWeight.w500), textAlign: TextAlign.center,),
+                  title: "Minister of Enjoyment",
+                  style: TextStyle(color: Colors.black, fontSize: 25.sp, fontWeight: FontWeight.w500), textAlign: TextAlign.center,),
               RText(
-                  title: "Your listing is now life",
-                  style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w500)),
+                  title: "Withdrawal of 60,000 was successful",
+                  style: TextStyle(color: Colors.black, fontSize: 15.sp, fontWeight: FontWeight.w500)),
               
               40.l,
               
@@ -41,15 +41,15 @@ class SuccessfulListing extends StatelessWidget {
                   height: 60.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      color: Tcolor.PrimaryYellow,
+                      color: Tcolor.PrimaryGreen,
                       borderRadius: BorderRadius.circular(30.r)),
                   child: Center(
                     child: RText(
-                      title: "View  in dashboard",
+                      title: "Okay, Thank you",
                       style: TextStyle(
-                          fontSize: 20.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
+                          fontSize: 15.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                 ),

@@ -6,6 +6,7 @@ import 'package:trash2cash/constants/space_exs.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/widgets/balance_card.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/widgets/custom_appbar.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/widgets/dashed_line_row.dart';
+import 'package:trash2cash/features/home_user/presentation/pages/widgets/view_details.dart';
 
 import '../../../../../constants/r_text.dart';
 
@@ -109,7 +110,7 @@ class Dashbord extends StatelessWidget {
                                       color: Colors.grey,
                                       fontSize: 12.sp,
                                       fontWeight: FontWeight.w900)),
-                                      5.b,
+                              5.b,
                               CircleAvatar(
                                 radius: 2, // dot size
                                 backgroundColor: Colors.grey, // dot color
@@ -124,25 +125,40 @@ class Dashbord extends StatelessWidget {
                             ],
                           ),
                           15.l,
-                          Row(
-                            children: [
-                              RText(
-                                  title: "View Details",
-                                  style: TextStyle(
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => DetailsPage(
+                                    imagePath: imagePath,
+                                    title: title,
+                                    type: type,
+                                    weight: weight,
+                                    status: "paid",
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                RText(
+                                    title: "View Details",
+                                    style: TextStyle(
+                                        color: Tcolor.tertiaryGreen,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w900)),
+                                5.b,
+                                GestureDetector(
+                                    onTap: () {},
+                                    child: Icon(
+                                      Icons.arrow_right_alt_outlined,
                                       color: Tcolor.tertiaryGreen,
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w900)),
-                                      5.b,
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: Icon(Icons.arrow_right_alt_outlined, 
-                                        color: Tcolor.tertiaryGreen, size: 20.sp,)
-                                      )
-
-
-                            ],
+                                      size: 20.sp,
+                                    ))
+                              ],
+                            ),
                           )
-
                         ],
                       ),
                     );
