@@ -142,9 +142,11 @@ class CustomBottomNavBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(Ionicons.home_outline, "Dashboard", 0),
+                _buildNavItem(null ,Ionicons.home_outline, "Dashboard", 0, ),
+                _buildNavItem( Image.asset("images/Checklist.png"),   null, "Activity", 1),
                 const SizedBox(width: 60), // space for FAB cut-out
-                _buildNavItem(Ionicons.settings_outline, "Setting", 1),
+                _buildNavItem(null, Ionicons.book_outline, "Education", 2),
+                _buildNavItem(null, Ionicons.settings_outline, "Setting", 3),
               ],
             ),
           ),
@@ -168,8 +170,9 @@ class CustomBottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
+  Widget _buildNavItem(Image? image, IconData? icon, String label, int index) {
     final isSelected = selectedIndex == index;
+    
 
     return GestureDetector(
       onTap: () => onTabSelected(index),
@@ -177,11 +180,11 @@ class CustomBottomNavBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+        icon != null ? Icon(
             icon,
             color: isSelected ? Colors.green : Colors.grey,
             size: 18.sp,
-          ),
+          ) : Image.asset("images/Checklist.png", color: isSelected ? Colors.green : Colors.grey,),
           Text(
             label,
             style: TextStyle(

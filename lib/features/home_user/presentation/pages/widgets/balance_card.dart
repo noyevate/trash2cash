@@ -14,8 +14,8 @@ class BalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final box = GetStorage();
 
-    final walletBal = box.read("walletBal");
-    final points = box.read("point");
+    final walletBal = box.read("walletBalance");
+    final points = box.read("points");
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

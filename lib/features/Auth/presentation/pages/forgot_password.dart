@@ -6,7 +6,7 @@ import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/custom_form.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
-import 'package:trash2cash/features/Auth/presentation/pages/check_inbox.dart';
+import 'package:trash2cash/features/auth//presentation/pages/check_inbox.dart';
 
 class ForgotPassword extends StatelessWidget {
   const ForgotPassword({super.key});

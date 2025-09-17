@@ -47,7 +47,7 @@ class DetailsPage extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20.r),
-              child: Image.asset(
+              child: Image.network(
                 imagePath,
                 width: double.infinity,
                 height: 200.h,

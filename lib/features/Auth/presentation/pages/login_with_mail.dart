@@ -1,22 +1,21 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/custom_form.dart';
-import 'package:trash2cash/constants/others.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
-import 'package:trash2cash/features/Auth/presentation/pages/forgot_password.dart';
-import 'package:trash2cash/features/Auth/presentation/pages/register_page.dart';
-import 'package:trash2cash/features/home_user/presentation/pages/bottom_nav_pages/dashbord.dart';
-import 'package:http/http.dart' as http;
-import 'package:trash2cash/features/home_user/presentation/pages/home.dart';
+import 'package:trash2cash/features/auth//presentation/pages/forgot_password.dart';
+import 'package:trash2cash/features/auth//presentation/pages/register_page.dart';
+import 'package:trash2cash/features/Auth/presentation/bloc/auth_bloc.dart';
+import 'package:trash2cash/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:trash2cash/features/profile/presentation/widgets/profile_loading_dialog.dart';
 
 class LoginWithMail extends StatefulWidget {
   const LoginWithMail({super.key});
@@ -28,71 +27,12 @@ class LoginWithMail extends StatefulWidget {
 class _LoginWithMailState extends State<LoginWithMail> {
   final box = GetStorage();
   bool _passwordVisible = false;
-  bool _isLoading = false;
   final TextEditingController emailTextEditingController =
       TextEditingController();
   final TextEditingController passwordTextEditingController =
       TextEditingController();
 
-  Future<void> login(BuildContext context) async {
-    String email = emailTextEditingController.text.trim();
-    String password = passwordTextEditingController.text.trim();
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email and password are required")),
-      );
-      return;
-    }
-
-    try {
-      var url = Uri.parse(
-          "https://$appBaseUrl/auth/login"); // replace with your API endpoint
-      var response = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "email": email,
-          "password": password,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        box.write("id", data['id']);
-        box.write("name", data['firstName']);
-        box.write("walletBal", data['walletBalance']);
-        box.write('point', data['points']);
-        box.write("accessToken", data["accessToken"]);
-        box.write("refreshToken", data["refreshToken"]);
-
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(content: Text("Login successful ✅")),
-        // );
-
-        // Navigate to home/dashboard
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => Home()));
-      } else {
-        var errorMsg = jsonDecode(response.body)['message'] ?? "Login failed";
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMsg)),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +42,38 @@ class _LoginWithMailState extends State<LoginWithMail> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
+        body: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if(state is Authenticated) {
+              // Navigator.of(context).pushReplacement(
+              //         MaterialPageRoute(builder: (context) => GateKeeper())  
+              //          );
+
+              showDialog(
+          context: context,
+          // barrierDismissible: false, // User cannot dismiss it
+          builder: (dialogContext) {
+            // It's crucial to provide the ProfileBloc to the dialog's context.
+            // context.read<ProfileBloc>() finds the BLoC provided in main.dart
+            return BlocProvider.value(
+              value: context.read<ProfileBloc>(),
+              child: const ProfileLoadingDialog(),
+            );
+          },
+        );
+            }
+            if (state is AuthFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: RText(title: state.error.toString(), style: TextStyle(color: Colors.black, fontSize: 12.sp,fontWeight: FontWeight.w400 ),),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+            }
+          },
+          builder: (context, state) {
+            final bool isLoading = state is AuthLoading;
+            return SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.only(left: 20.w, right: 20.w),
             child: SafeArea(
@@ -208,7 +179,17 @@ class _LoginWithMailState extends State<LoginWithMail> {
                   ),
                   15.l,
                   GestureDetector(
-                    onTap: _isLoading ? null : () => login(context),
+                    onTap: isLoading
+                            ? null
+                            : () {
+                                context.read<AuthBloc>().add(
+                                      AuthLoginRequested(
+                                        emailTextEditingController.text.trim(),
+                                        passwordTextEditingController.text
+                                            .trim(),
+                                      ),
+                                    );
+                              },
                     child: Container(
                       height: 60.h,
                       width: double.infinity,
@@ -216,7 +197,7 @@ class _LoginWithMailState extends State<LoginWithMail> {
                           color: Tcolor.PrimaryGreen,
                           borderRadius: BorderRadius.circular(30.r)),
                       child: Center(
-                          child: _isLoading
+                          child: isLoading
           ? SizedBox(
               height: 24,
               width: 24,
@@ -266,7 +247,9 @@ class _LoginWithMailState extends State<LoginWithMail> {
               ),
             ),
           ),
-        ),
+        );
+          }
+        )
       ),
     );
   }

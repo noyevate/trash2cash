@@ -6,9 +6,9 @@ import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/custom_form.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
-import 'package:trash2cash/features/Auth/presentation/pages/forgot_password.dart';
-import 'package:trash2cash/features/Auth/presentation/pages/login_with_mail.dart';
-import 'package:trash2cash/features/Auth/presentation/pages/register_page.dart';
+import 'package:trash2cash/features/auth//presentation/pages/forgot_password.dart';
+import 'package:trash2cash/features/auth//presentation/pages/login_with_mail.dart';
+import 'package:trash2cash/features/auth//presentation/pages/register_page.dart';
 
 class SsetNewPass extends StatefulWidget {
   const SsetNewPass({super.key});

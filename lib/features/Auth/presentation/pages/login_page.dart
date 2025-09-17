@@ -4,7 +4,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
-import 'package:trash2cash/features/Auth/presentation/pages/login_with_mail.dart';
+import 'package:trash2cash/features/auth//presentation/pages/login_with_mail.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/home.dart';
 
 class LoginPage extends StatefulWidget {

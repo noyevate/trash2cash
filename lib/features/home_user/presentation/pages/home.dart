@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/constom_bottom_nav_bar.dart';
 import 'package:trash2cash/constants/r_text.dart';
-import 'package:trash2cash/features/home_user/presentation/pages/bottom_nav_pages/create_waste_list.dart';
+import 'package:trash2cash/features/activity/presentation/pages/activity.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/bottom_nav_pages/dashbord.dart';
+import 'package:trash2cash/features/home_user/presentation/pages/bottom_nav_pages/education.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/bottom_nav_pages/settings.dart';
+import 'package:trash2cash/features/waste/presentation/pages/create_waste_list.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,7 +21,11 @@ class _HomeState extends State<Home> {
 
   final List<Widget> _pages = [
     Dashbord(),
-    Settings()
+        Activity(),
+
+    Education(),
+    Settings(),
+
   ];
 
   @override

@@ -26,7 +26,7 @@ class RText extends StatelessWidget {
       ) ,
       textAlign: textAlign ?? TextAlign.left,
       
-      // overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.ellipsis,
       // softWrap: false,
     );
   }

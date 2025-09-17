@@ -1,8 +1,14 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
-double height = 1640.h;
-double width = 720.w;
+double height = 812.h;
+double width = 375.w;
 
 
-const String appBaseUrl = "trash2cash-dbcc.onrender.com";
+const String appBaseUrl = "http://trash2cash.eu-north-1.elasticbeanstalk.com";
+const activityList = [
+  "ALL",
+"PAID",
+"SCHEDULED",
+"COMPLETED" 
+];

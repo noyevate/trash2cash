@@ -1,18 +1,17 @@
-import 'dart:convert';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:trash2cash/constants/color_extension.dart';
 import 'package:trash2cash/constants/custom_form.dart';
-import 'package:trash2cash/constants/others.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
+import 'package:trash2cash/features/Auth/presentation/bloc/auth_bloc.dart';
 import 'package:trash2cash/features/Auth/presentation/pages/login_page.dart';
-import 'package:http/http.dart' as http;
-import 'package:trash2cash/features/home_user/presentation/pages/home.dart';
+import 'package:trash2cash/features/auth/presentation/pages/login_with_mail.dart';
+import 'package:trash2cash/features/choose_role/presentation/pages/choose_role.dart';
+
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -22,12 +21,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final box = GetStorage();
-
-  
   bool _passwordVisible = false;
-
-  bool _isLoading = false;
 
   final TextEditingController nameTextEditingController =
       TextEditingController();
@@ -35,69 +29,6 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   final TextEditingController passwordTextEditingController =
       TextEditingController();
-
-  void _register(BuildContext context) async {
-    String name = nameTextEditingController.text.trim();
-    String email = emailTextEditingController.text.trim();
-    String password = passwordTextEditingController.text.trim();
-    print(name);
-    print(email);
-    print(password);
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    if (name.isEmpty || email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("All fields are required")),
-      );
-      return;
-    }
-
-    try {
-      var url = Uri.parse("https://$appBaseUrl/auth/register");
-      var response = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "firstName": name,
-          "email": email,
-          "password": password,
-        }),
-      );
-      print("Status code: ${response.statusCode}");
-      print("Response body: ${response.body}");
-
-      if (response.statusCode == 200) {
-        print(response.body);
-        final data = jsonDecode(response.body);
-        box.write("name", nameTextEditingController.text);
-        box.write("accessToken", data["accessToken"]);
-        box.write("refreshToken", data["refreshToken"]);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Registration successful ✅")),
-        );
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => Home()));
-      } else {
-        var errorMsg =
-            jsonDecode(response.body)['message'] ?? "Registration failed";
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMsg)),
-        );
-      }
-    } catch (e) {
-      print(e);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,111 +158,157 @@ class _RegisterPageState extends State<RegisterPage> {
                   ],
                 ),
                 30.l,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RText(
-                        title: "First Name",
-                        style: TextStyle(color: Colors.black, fontSize: 15.sp)),
-                    CustomForm(
-                      darkTheme: false,
-                      prefixIcon: null,
-                      hintText: "Enter first name",
-                      controller: nameTextEditingController,
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return "name can\'t be empty";
-                        }
-                        if (text.length < 2) {
-                          return "Please enter a valid name";
-                        }
-                        if (text.length > 50) {
-                          return "name can\'t be more than 50 characters";
-                        }
-                        return null;
-                      },
-                    ),
-                    10.l,
-                    RText(
-                        title: "Email",
-                        style: TextStyle(color: Colors.black, fontSize: 15.sp)),
-                    CustomForm(
-                      darkTheme: false,
-                      prefixIcon: null,
-                      hintText: "Enter your email",
-                      controller: emailTextEditingController,
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return "email can\'t be empty";
-                        }
-                        if (text.length < 2) {
-                          return "Please enter a valid email";
-                        }
-                        if (EmailValidator.validate(text) == true) {
+                BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
+                  // --- HANDLE SIDE EFFECTS HERE ---
+                  if (state is RegistrationSuccess) {
+                    // On success, navigate to the home screen or profile setup
+                    // and remove the auth screens from the back stack.
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: RText(
+                            title:'Account Successfully Created', style: TextStyle(color: Colors.black, fontSize: 20.sp,fontWeight: FontWeight.w400 ),),
+                        backgroundColor: Colors.white,
+                      ),
+                    );
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => ChooseRole())  
+                       );
+                    
+                    
+                    
+                  }
+                  if (state is AuthFailure) {
+                    // On failure, show an error message in a SnackBar
+                    
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.error.toString()),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }, builder: (context, state) {
+                  final bool isLoading = state is AuthLoading;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RText(
+                          title: "First Name",
+                          style:
+                              TextStyle(color: Colors.black, fontSize: 15.sp)),
+                      CustomForm(
+                        darkTheme: false,
+                        prefixIcon: null,
+                        hintText: "Enter first name",
+                        controller: nameTextEditingController,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return "name can\'t be empty";
+                          }
+                          if (text.length < 2) {
+                            return "Please enter a valid name";
+                          }
+                          if (text.length > 50) {
+                            return "name can\'t be more than 50 characters";
+                          }
                           return null;
-                        }
-                        if (text.length > 50) {
-                          return "email can\'t be more than 50 characters";
-                        }
-                        return null;
-                      },
-                    ),
-                    10.l,
-                    RText(
-                        title: "Password",
-                        style: TextStyle(color: Colors.black, fontSize: 15.sp)),
-                    CustomForm(
-                      darkTheme: false,
-                      prefixIcon: null,
-                      hintText: "Enter password",
-                      controller: passwordTextEditingController,
-                      obscureText: !_passwordVisible,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
                         },
-                        icon: Icon(
-                          _passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: Colors.grey,
+                      ),
+                      10.l,
+                      RText(
+                          title: "Email",
+                          style:
+                              TextStyle(color: Colors.black, fontSize: 15.sp)),
+                      CustomForm(
+                        darkTheme: false,
+                        prefixIcon: null,
+                        hintText: "Enter your email",
+                        controller: emailTextEditingController,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return "email can\'t be empty";
+                          }
+                          if (text.length < 2) {
+                            return "Please enter a valid email";
+                          }
+                          if (EmailValidator.validate(text) == true) {
+                            return null;
+                          }
+                          if (text.length > 50) {
+                            return "email can\'t be more than 50 characters";
+                          }
+                          return null;
+                        },
+                      ),
+                      10.l,
+                      RText(
+                          title: "Password",
+                          style:
+                              TextStyle(color: Colors.black, fontSize: 15.sp)),
+                      CustomForm(
+                        darkTheme: false,
+                        prefixIcon: null,
+                        hintText: "Enter password",
+                        controller: passwordTextEditingController,
+                        obscureText: !_passwordVisible,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                          icon: Icon(
+                            _passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
-                    ),
-                    20.l,
-                    GestureDetector(
-                      onTap: _isLoading ? null : () => _register(context),
-                      child: Container(
-                        height: 60.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Color(0xff2E7D32),
-                            borderRadius: BorderRadius.circular(30.r)),
-                        child: Center(
-                          child: _isLoading
-          ? SizedBox(
-              height: 24,
-              width: 24,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2,
-              ),
-            )
-          : RText(
-              title: "Create your Account",
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+                      20.l,
+                      GestureDetector(
+                        onTap: isLoading
+                            ? null
+                            : () {
+                                context.read<AuthBloc>().add(
+                                      AuthRegisterRequested(
+                                        emailTextEditingController.text.trim(),
+                                        nameTextEditingController.text.trim(),
+                                        passwordTextEditingController.text
+                                            .trim(),
+                                      ),
+                                    );
+                              },
+                        child: Container(
+                          height: 60.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Color(0xff2E7D32),
+                              borderRadius: BorderRadius.circular(30.r)),
+                          child: Center(
+                            child: isLoading
+                                ? SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : RText(
+                                    title: "Create your Account",
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                }),
                 10.l,
                 RText(
                     title: "We keep your details safe. No spam, no sharing.",
