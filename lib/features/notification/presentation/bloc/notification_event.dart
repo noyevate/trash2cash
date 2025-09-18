@@ -7,5 +7,15 @@ abstract class NotificationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Event dispatched when the NotificationPage loads or user pulls to refresh.
 class FetchNotificationsRequested extends NotificationEvent {}
+
+class NotificationMarkedAsRead extends NotificationEvent {
+  final int notificationId;
+
+  const NotificationMarkedAsRead(this.notificationId);
+
+  @override
+  List<Object> get props => [notificationId];
+}
+
+class MarkAllNotificationsAsReadRequested extends NotificationEvent {}

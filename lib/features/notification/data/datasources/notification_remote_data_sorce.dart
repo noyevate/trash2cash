@@ -8,6 +8,9 @@ import 'package:trash2cash/features/notification/data/models/notification_item_m
 // --- The Contract ---
 abstract class NotificationRemoteDataSource {
   Future<List<NotificationItemModel>> getNotifications();
+  Future<void> markNotificationAsRead(int notificationId);
+   Future<void> markAllNotificationsAsRead();
+ 
 }
 
 // --- The Implementation ---
@@ -24,7 +27,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       throw ServerException('Not authenticated. No token found.');
     }
 
-    final url = Uri.parse("$appBaseUrl/notifications");
+    final url = Uri.parse("$appBaseUrl/notifications/all");
     
     print("Fetching notifications from: $url"); // For debugging
 
@@ -43,6 +46,61 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
         return contentList.map((json) => NotificationItemModel.fromJson(json)).toList();
       } else {
         throw ServerException('Failed to load notifications. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ServerException('An unexpected error occurred: ${e.toString()}');
+    }
+  }
+
+   @override
+  Future<void> markNotificationAsRead(int notificationId) async {
+    final token = box.read('accessToken');
+    if (token == null) throw ServerException('Not authenticated.');
+
+    final url = Uri.parse("$appBaseUrl/notifications/mark-read/$notificationId");
+    
+    try {
+      final response = await client.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      print("notification as read url: ${url}");
+      print("notification as read: ${response.body}");
+      print("notification as read statuscode: ${response.statusCode}");
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw ServerException('Failed to mark notification as read. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ServerException('An unexpected error occurred: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<void> markAllNotificationsAsRead() async {
+    final token = box.read('accessToken');
+    if (token == null) throw ServerException('Not authenticated.');
+
+    // The endpoint is likely something like /notifications/read-all
+    final url = Uri.parse("$appBaseUrl/notifications/mark-all-read");
+    
+    try {
+      // A PATCH or PUT request is suitable here.
+      final response = await client.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      print("notification as mark all read url: ${url}");
+      print("notification as mark all read: ${response.body}");
+      print("notification as mark all read statuscode: ${response.statusCode}");
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw ServerException('Failed to mark all notifications as read. Status: ${response.statusCode}');
       }
     } catch (e) {
       throw ServerException('An unexpected error occurred: ${e.toString()}');

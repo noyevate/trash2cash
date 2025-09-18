@@ -2,6 +2,6 @@ import 'package:trash2cash/features/notification/domain/entities/notiication_ite
 abstract class NotificationRepository {
   Future<List<NotificationItem>> getNotifications();
   // We can add these later
-  // Future<void> markAsRead(int notificationId);
-  // Future<void> markAllAsRead();
+  Future<void> markNotificationAsRead(int notificationId);
+  Future<void> markAllNotificationsAsRead();
 }

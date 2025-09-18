@@ -18,6 +18,8 @@ import 'package:trash2cash/features/notification/data/datasources/notification_r
 import 'package:trash2cash/features/notification/data/repositories/notification_repository_impl.dart';
 import 'package:trash2cash/features/notification/domain/repositories/notification_repository.dart';
 import 'package:trash2cash/features/notification/domain/usecases/get_notifiction.dart';
+import 'package:trash2cash/features/notification/domain/usecases/mark_all_notification_as_read.dart';
+import 'package:trash2cash/features/notification/domain/usecases/mark_notification_as_read.dart';
 import 'package:trash2cash/features/notification/presentation/bloc/notification_bloc.dart';
 import 'package:trash2cash/features/onboarding/presentation/pages/onboarding.dart';
 import 'package:trash2cash/features/profile/data/datasources/profile_remote_data_source.dart';
@@ -165,6 +167,8 @@ class MyApp extends StatelessWidget {
           BlocProvider<NotificationBloc>(
             create: (_) => NotificationBloc(
               getNotifications: GetNotifications(notificationRepository),
+              markNotificationAsRead: MarkNotificationAsRead(notificationRepository),
+              markAllNotificationsAsRead: MarkAllNotificationsAsRead(notificationRepository),
             ),
           ),
         ],

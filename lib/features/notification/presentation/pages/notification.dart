@@ -8,6 +8,7 @@ import 'package:trash2cash/features/notification/presentation/bloc/notification_
 import 'package:trash2cash/features/notification/presentation/widgets/notification_card.dart';
 import 'package:trash2cash/features/notification/presentation/widgets/notification_details.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:trash2cash/features/schedule/presentation/pages/view_schedule_page.dart';
 
 import '../../../../constants/color_extension.dart';
 import '../../domain/entities/notiication_item.dart';
@@ -63,22 +64,45 @@ class _NotificationPageState extends State<NotificationPage> {
                       ),
                     ],
                   ),
-                  Padding(
+                  BlocBuilder<NotificationBloc, NotificationState>(
+                      builder: (context, state) {
+                    bool hasUnread = false;
+                    if (state is NotificationLoadSuccess) {
+                      hasUnread = state.notifications.any((n) => !n.isRead);
+                    }
+                    // if (state is NotificationMarkAllInProgress) {
+                    //   return Center(
+                    //     child: SizedBox(
+                    //       width: 20.w,
+                    //       height: 20.h,
+                    //       child: CircularProgressIndicator(
+                    //           strokeWidth: 2, color: Color(0xff279B54)),
+                    //     ),
+                    //   );
+                    // }
+                    return Padding(
                     padding: EdgeInsets.only(
                       left: 15.w,
                       right: 15.w,
                     ),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: hasUnread
+                  ? () {
+                      context.read<NotificationBloc>().add(MarkAllNotificationsAsReadRequested());
+                    }
+                  : null,
                       child: RText(
                         title: "Mark all as read",
                         style: TextStyle(
                             fontSize: 15.sp,
-                            color: const Color(0xff279B54),
+                            color:  hasUnread ? Color(0xff279B54) : Colors.grey,
                             fontWeight: FontWeight.w600),
                       ),
                     ),
-                  ),
+                  );
+
+                  }),
+                  
                 ],
               ),
             ),
@@ -119,19 +143,48 @@ class _NotificationPageState extends State<NotificationPage> {
             return ListView.builder(
               padding: const EdgeInsets.all(16.0),
               itemCount: state.notifications.length,
-              itemBuilder: (context,index) {
+              itemBuilder: (context, index) {
                 final notification = state.notifications[index];
 
                 return NotificationCard(
-                  icon: _getIconForTitle(notification.title),
-                  iconBackgroundColor: _getIconColorForTitle(notification.title),
-                  cardColor: _getCardColor(notification),
-                  isRead: notification.isRead,
-                  title: notification.title,
-                  description: notification.message,
-                  timestamp: timeago.format(notification.createdAt),
-                  onTap: () {},
-                );
+                    icon: _getIconForTitle(notification.title),
+                    iconColor: _getIconColorForTitle(notification.title),
+                    cardColor: _getCardColor(notification),
+                    isRead: notification.isRead,
+                    title: notification.title,
+                    description: notification.message,
+                    timestamp: timeago.format(notification.createdAt),
+                    onTap: () {
+                      if (!notification.isRead) {
+                        context
+                            .read<NotificationBloc>()
+                            .add(NotificationMarkedAsRead(notification.id));
+                      }
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          // Pass the data to the details page
+                          builder: (_) => NotificationDetailsPage(
+                            appBarTitle: notification.title,
+                            mainTitle: _getMainTitle(notification.title),
+                            // recyclerName: '',
+                            // wasteAmount: '',
+                            // wasteType: '',
+                            // wasteId: '',
+                            secondaryText: notification.message,
+                            buttonText: 'View Schedule',
+                            onButtonPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const ViewSchedulePage()),
+                              );
+                            }, // Or another relevant title
+                          ),
+                        ),
+                      );
+                    });
               },
             );
           }
@@ -142,36 +195,60 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 }
 
- IconData _getIconForTitle(String title) {
-    if (title.toLowerCase().contains('payment')) return Ionicons.cash_outline;
-    if (title.toLowerCase().contains('withdrawal')) return Ionicons.card_outline;
-    if (title.toLowerCase().contains('pickup')) return Ionicons.cube_outline;
-    if (title.toLowerCase().contains('milestone')) return Ionicons.trophy_outline;
-    if (title.toLowerCase().contains('recycler')) return Ionicons.person_add_outline;
-    return Ionicons.notifications_outline; // Default
-  }
+IconData _getIconForTitle(String title) {
+  if (title.toLowerCase().contains('payment')) return Ionicons.cash_outline;
+  if (title.toLowerCase().contains('withdrawal')) return Ionicons.card_outline;
+  if (title.toLowerCase().contains('pickup')) return Ionicons.cube_outline;
+  if (title.toLowerCase().contains('milestone')) return Ionicons.trophy_outline;
+  if (title.toLowerCase().contains('recycler'))
+    return Ionicons.person_add_outline;
+  return Ionicons.notifications_outline; // Default
+}
 
-  Color _getIconColorForTitle(String title) {
-    if (title.toLowerCase().contains('payment') || title.toLowerCase().contains('pickup')) {
-      return CardColors.primaryGreen;
-    }
-    if (title.toLowerCase().contains('milestone')) {
-      return const Color(0xffFBC02D); // Gold
-    }
-    if (title.toLowerCase().contains('withdrawal')) {
-      return CardColors.primaryBlue;
-    }
-    return Colors.grey.shade500;
+Color _getIconColorForTitle(String title) {
+  if (title.toLowerCase().contains('payment') ||
+      title.toLowerCase().contains('pickup')) {
+    return CardColors.primaryGreen;
   }
-
-  Color _getCardColor(NotificationItem notification) {
-    // Only give special background colors to unread notifications
-    if (!notification.isRead) {
-      if (notification.title.toLowerCase().contains('payment')) return CardColors.lightGreen;
-      if (notification.title.toLowerCase().contains('pickup')) return CardColors.lightYellow;
-      if (notification.title.toLowerCase().contains('milestone')) return CardColors.lightYellow;
-    }
-    // Default to white for all read notifications and other types
-    return Colors.white;
+  if (title.toLowerCase().contains('milestone')) {
+    return const Color(0xffFBC02D); // Gold
   }
+  if (title.toLowerCase().contains('withdrawal')) {
+    return CardColors.primaryBlue;
+  }
+  if (title.toLowerCase().contains('pending')) {
+    return const Color(0xffFBC02D); // Gold
+  }
+  return Colors.grey;
+}
 
+Color _getCardColor(NotificationItem notification) {
+  // Only give special background colors to unread notifications
+  if (!notification.isRead) {
+    if (notification.title.toLowerCase().contains('payment'))
+      return CardColors.lightGreen;
+    if (notification.title.toLowerCase().contains('pickup'))
+      return CardColors.lightYellow;
+    if (notification.title.toLowerCase().contains('milestone'))
+      return CardColors.lightYellow;
+  }
+  // Default to white for all read notifications and other types
+  return Colors.white;
+}
+
+String _getMainTitle(String title) {
+  if (title.toLowerCase().contains('payment') ||
+      title.toLowerCase().contains('pickup')) {
+    return "Congratulations";
+  }
+  if (title.toLowerCase().contains('milestone')) {
+    return "Milestone"; // Gold
+  }
+  if (title.toLowerCase().contains('withdrawal')) {
+    return "Withdrawal";
+  }
+  if (title.toLowerCase().contains('pending')) {
+    return "Pending"; // Gold
+  }
+  return "";
+}

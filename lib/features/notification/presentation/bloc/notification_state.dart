@@ -10,11 +10,10 @@ abstract class NotificationState extends Equatable {
 // The initial state before any action.
 class NotificationInitial extends NotificationState {}
 
-// The state when the API call is in progress.
 class NotificationLoadInProgress extends NotificationState {}
 
-// The state when notifications have been successfully fetched.
-// It holds the sorted list of notifications.
+class NotificationMarkAllInProgress extends NotificationState {}
+
 class NotificationLoadSuccess extends NotificationState {
   final List<NotificationItem> notifications;
 
@@ -24,7 +23,6 @@ class NotificationLoadSuccess extends NotificationState {
   List<Object> get props => [notifications];
 }
 
-// The state when fetching notifications has failed.
 class NotificationLoadFailure extends NotificationState {
   final String error;
 
@@ -33,3 +31,4 @@ class NotificationLoadFailure extends NotificationState {
   @override
   List<Object> get props => [error];
 }
+

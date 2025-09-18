@@ -55,7 +55,6 @@ class _DashbordState extends State<Dashbord> {
     final box = GetStorage();
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: PreferredSize(preferredSize: Size.fromHeight(550.h), child: CustomAppbar()),
       body: SafeArea(
           child: Padding(
         padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h),

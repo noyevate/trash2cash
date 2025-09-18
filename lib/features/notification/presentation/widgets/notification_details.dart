@@ -16,10 +16,10 @@ class Tcolor {
 class NotificationDetailsPage extends StatelessWidget {
   final String appBarTitle;
   final String mainTitle;
-  final String recyclerName;
-  final String wasteAmount;
-  final String wasteType;
-  final String wasteId;
+  // final String recyclerName;
+  // final String wasteAmount;
+  // final String wasteType;
+  // final String wasteId;
   final String secondaryText;
   final String buttonText;
   final VoidCallback onButtonPressed;
@@ -28,10 +28,10 @@ class NotificationDetailsPage extends StatelessWidget {
     super.key,
     required this.appBarTitle,
     required this.mainTitle,
-    required this.recyclerName,
-    required this.wasteAmount,
-    required this.wasteType,
-    required this.wasteId,
+    // required this.recyclerName,
+    // required this.wasteAmount,
+    // required this.wasteType,
+    // required this.wasteId,
     required this.secondaryText,
     required this.buttonText,
     required this.onButtonPressed,
@@ -84,8 +84,8 @@ class NotificationDetailsPage extends StatelessWidget {
             // --- Main Title ---
             RText(
               title: mainTitle,
-              style: const TextStyle(
-                fontSize: 32,
+              style: TextStyle(
+                fontSize: 32.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -93,38 +93,44 @@ class NotificationDetailsPage extends StatelessWidget {
             const SizedBox(height: 24),
 
             // --- Mixed-style Description using RichText ---
-            RichText(
-              text: TextSpan(
-                style: normalTextStyle,
-                children: [
-                  TextSpan(text: "$recyclerName has paid for your waste "),
-                  TextSpan(text: "$wasteAmount of ", style: boldTextStyle),
-                  TextSpan(text: wasteType, style: boldTextStyle),
-                  const TextSpan(text: " with id "),
-                  TextSpan(
-                    text: wasteId,
-                    style: const TextStyle(
-                      color: Tcolor.primaryGreen,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                      fontFamily: "Metropolis"
-                    ),
-                    // Make the ID tappable to copy
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Clipboard.setData(ClipboardData(text: wasteId));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('ID copied to clipboard!')),
-                        );
-                      },
-                  ),
-                  const TextSpan(text: ".\n\n"), // Add a period and line breaks
-                  TextSpan(text: secondaryText),
-                ],
-              ),
-            ),
+            // RichText(
+            //   text: TextSpan(
+            //     style: normalTextStyle,
+            //     children: [
+            //       TextSpan(text: "$recyclerName has paid for your waste "),
+            //       TextSpan(text: "$wasteAmount of ", style: boldTextStyle),
+            //       TextSpan(text: wasteType, style: boldTextStyle),
+            //       const TextSpan(text: " with id "),
+            //       TextSpan(
+            //         text: wasteId,
+            //         style: const TextStyle(
+            //           color: Tcolor.primaryGreen,
+            //           fontWeight: FontWeight.bold,
+            //           decoration: TextDecoration.underline,
+            //           fontFamily: "Metropolis"
+            //         ),
+            //         // Make the ID tappable to copy
+            //         // recognizer: TapGestureRecognizer()
+            //         //   ..onTap = () {
+            //         //     Clipboard.setData(ClipboardData(text: wasteId));
+            //         //     ScaffoldMessenger.of(context).showSnackBar(
+            //         //       const SnackBar(
+            //         //           content: Text('ID copied to clipboard!')),
+            //         //     );
+            //         //   },
+            //       ),
+            //       const TextSpan(text: ".\n\n"), // Add a period and line breaks
+            //       TextSpan(text: secondaryText),
+            //     ],
+            //   ),
+            // ),
             // Pushes the button to the bottom
+
+            RText(
+              title: secondaryText, 
+              style: normalTextStyle,
+              overflow: TextOverflow.visible,
+            ),
             20.l,
             // --- Action Button ---
             SizedBox(

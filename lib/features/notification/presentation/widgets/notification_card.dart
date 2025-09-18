@@ -12,21 +12,21 @@ class CardColors{
 
 class NotificationCard extends StatelessWidget {
   final IconData icon;
-  final Color iconBackgroundColor;
   final String title;
   final String description;
   final String timestamp;
   final bool isRead;
   final Color cardColor;
   final VoidCallback? onTap;
+  final Color iconColor;
 
   const NotificationCard({
     super.key,
     required this.icon,
-    required this.iconBackgroundColor,
     required this.title,
     required this.description,
     required this.timestamp,
+    required this.iconColor,
     this.isRead = false,
     this.cardColor = Colors.white,
     this.onTap,
@@ -52,8 +52,8 @@ class NotificationCard extends StatelessWidget {
               // --- The Icon ---
               CircleAvatar(
                 radius: 20.r,
-                backgroundColor: iconBackgroundColor,
-                child: Icon(icon, color: Colors.white, size: 26),
+                backgroundColor: Colors.white,
+                child: Icon(icon, color: iconColor, size: 26),
               ),
               const SizedBox(width: 16),
               // --- The Text Content ---
