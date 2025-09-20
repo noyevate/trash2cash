@@ -17,7 +17,7 @@ class WithdrawFundsCustomAppbar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          20.l,
+          30.l,
           Row(
             children: [
               IconButton(onPressed: () {

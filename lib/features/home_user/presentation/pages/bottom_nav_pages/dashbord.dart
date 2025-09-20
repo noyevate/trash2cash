@@ -9,7 +9,9 @@ import 'package:trash2cash/features/home_user/presentation/pages/widgets/custom_
 import 'package:trash2cash/features/home_user/presentation/pages/widgets/dashed_line_row.dart';
 import 'package:trash2cash/features/home_user/presentation/pages/widgets/view_details.dart';
 import 'package:trash2cash/features/home_user/presentation/widgets/create_account_modal.dart';
+import 'package:trash2cash/features/notification/presentation/bloc/notification_badge_bloc.dart';
 import 'package:trash2cash/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:trash2cash/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:trash2cash/features/waste/presentation/bloc/listings_bloc.dart';
 
 import '../../../../../constants/r_text.dart';
@@ -29,6 +31,8 @@ class _DashbordState extends State<Dashbord> {
       _checkProfileAndShowDialog();
     });
     context.read<ListingsBloc>().add(FetchListingsRequested());
+    context.read<NotificationBadgeBloc>().add(FetchUnreadCount());
+    context.read<WalletBloc>().add(FetchWalletDetails());
   }
 
   void _checkProfileAndShowDialog() {
@@ -212,8 +216,8 @@ class WastListingTile extends StatelessWidget {
                     overflow: TextOverflow.visible,
                     style: TextStyle(
                         color: Tcolor.PrimaryGreen,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w900)),
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w800)),
               )
             ],
           ),

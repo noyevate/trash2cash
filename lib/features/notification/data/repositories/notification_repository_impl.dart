@@ -38,4 +38,13 @@ class NotificationRepositoryImpl implements NotificationRepository {
       rethrow;
     }
   }
+
+   @override
+  Future<int> getUnreadNotificationCount() {
+    try {
+      return remoteDataSource.getUnreadNotificationCount();
+    } on ServerException {
+      rethrow;
+    }
+  }
 }

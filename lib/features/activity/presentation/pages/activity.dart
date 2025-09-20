@@ -46,7 +46,7 @@ class _ActivityState extends State<Activity> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Colors.white,
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(180.h),
+            preferredSize: Size.fromHeight(150.h),
             child: Container(
               decoration: BoxDecoration(color:  const Color(0xffFCCC3E)),
               child: Column(

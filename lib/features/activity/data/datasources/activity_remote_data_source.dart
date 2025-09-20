@@ -27,7 +27,7 @@ class ActivityRemoteDataSourceImpl implements ActivityRemoteDataSource {
 
     // If 'ALL' is selected, we hit the endpoint without a type.
     // Otherwise, we append the type name (e.g., "PAID", "SCHEDULED").
-    final endpoint = type == ActivityType.ALL ? '/activities/all' : '/activities/${type.name}';
+    final endpoint = type == ActivityType.ALL ? '/activities/ALL' : '/activities/${type.name}';
     final url = Uri.parse("$appBaseUrl$endpoint");
     
     print("Fetching activities from: $url"); // For debugging
@@ -40,7 +40,8 @@ class ActivityRemoteDataSourceImpl implements ActivityRemoteDataSource {
           "Authorization": "Bearer $token",
         },
       );
-
+      print("activities token: ${token}");
+      print("activities: ${response.body}");
       if (response.statusCode == 200) {
         print("activities: ${response.body}");
         // 1. Decode the full JSON response which is a Map

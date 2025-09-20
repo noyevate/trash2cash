@@ -193,27 +193,30 @@ Widget _buildOnboardingPage({
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: RText(
-              title: title1,
+          child: Text(
+               title1,
               style: TextStyle(
                   color: Colors.black,
+                  fontFamily: "Metropolis",
                   fontSize: 35.sp,
                   fontWeight: FontWeight.bold)),
         ),
-        RText(
-            title: title2,
+        Text(
+             title2,
             style: TextStyle(
                 color: Colors.black,
+                fontFamily: "Metropolis",
                 fontSize: 35.sp,
                 fontWeight: FontWeight.bold)),
         10.l,
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: RText(
+          child: Text(
               textAlign: TextAlign.center,
-              title: description,
+               description,
               style: TextStyle(
                   color: Colors.black,
+                  fontFamily: "Metropolis",
                   fontSize: 20.sp,
                   fontWeight: FontWeight.w400)),
         ),

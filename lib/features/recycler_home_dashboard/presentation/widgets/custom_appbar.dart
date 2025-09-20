@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
+import 'package:trash2cash/features/home_user/presentation/pages/widgets/notification_badge.dart';
+import 'package:trash2cash/features/notification/presentation/bloc/notification_badge_bloc.dart';
+import 'package:trash2cash/features/notification/presentation/pages/notification.dart';
 
 class CustomAppbar extends StatelessWidget {
   const CustomAppbar({super.key, required this.name});
@@ -50,12 +54,23 @@ class CustomAppbar extends StatelessWidget {
               ),
             ],
           ),
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Ionicons.notifications_outline,
-                size: 18.sp,
-              ))
+          BlocBuilder<NotificationBadgeBloc, NotificationBadgeState>(
+            builder: (context, state) {
+              return NotificationIconWithBadge(
+                icon: Ionicons.notifications_outline,
+                color: Colors.black54,
+                iconSize: 18.sp,
+                unreadCount: state.count, // Pass the hardcoded count
+                onTap: () {
+                  print(state.count);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const NotificationPage()),
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );

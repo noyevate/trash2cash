@@ -152,19 +152,21 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
 
           // Circle cut-out
-          Positioned(
-            top: -20,
-            right: 100,
-            left: MediaQuery.of(context).size.width / 3 - (20.w /5 ),
-            child: Container(
-              width: 60.w,
-              height: 60.h,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: -40.h,
+          //   right: 120.w,
+            
+            
+          //   left: MediaQuery.of(context).size.width / 3 - (20.w /6 ),
+          //   child: Container(
+          //     width: 60.w,
+          //     height: 60.h,
+          //     decoration: const BoxDecoration(
+          //       color: Colors.white,
+          //       shape: BoxShape.circle,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

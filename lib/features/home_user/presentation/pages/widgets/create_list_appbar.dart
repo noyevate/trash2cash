@@ -17,7 +17,7 @@ class CreateListAppbar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          20.l,
+          30.l,
           Row(
             children: [
               IconButton(onPressed: () {
@@ -28,7 +28,10 @@ class CreateListAppbar extends StatelessWidget {
 
             ],
           ),
-          RText(title: "Add details of the waste items you want to recycle", style: TextStyle(color: Colors.black, fontSize: 15.sp, fontWeight: FontWeight.w400)),
+          Padding(
+            padding: EdgeInsets.only(left: 20.w, right: 20.w),
+            child: Text("Add details of the waste items you want to recycle", style: TextStyle(fontFamily: "Metropolis", color: Colors.black, fontSize: 15.sp, fontWeight: FontWeight.w400)),
+          ),
         ],
       ),
     );

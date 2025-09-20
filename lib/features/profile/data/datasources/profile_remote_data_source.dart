@@ -48,6 +48,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         print("profile: ${response.body}");
         UserProfileModel userProfile = UserProfileModel.fromJson(jsonDecode(response.body));
         box.write("role", userProfile.role?.name);
+        box.write('imageUrl', userProfile.imageUrl);
         return userProfile;
       } else {
         print("failed to load profile: ${response.body}");
@@ -95,6 +96,8 @@ Future<UserProfileModel> updateUserProfile({
 
     if (response.statusCode == 200) {
       print("update profile success: ${response.body}");
+      final userprof = UserProfileModel.fromJson(jsonDecode(response.body));
+      box.write("imageUrl", userprof.imageUrl);
       return UserProfileModel.fromJson(jsonDecode(response.body));
     } else {
       print("update profile failure: ${response.body}");

@@ -54,11 +54,12 @@ class _LoginPageState extends State<LoginPage> {
 
           10.l,
             Center(
-              child: RText(
-                  title: "Log in to keep turning waste into value.",
+              child: Text(
+                   "Log in to keep turning waste into value.",
                   style: TextStyle(
+                    fontFamily: "Metropolis",
                       color: Colors.black,
-                      fontSize: 20.sp,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.w400)),
             ),
 

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/constants/space_exs.dart';
+import 'package:trash2cash/features/notification/presentation/bloc/notification_badge_bloc.dart';
 import 'package:trash2cash/features/notification/presentation/bloc/notification_bloc.dart';
 import 'package:trash2cash/features/notification/presentation/widgets/notification_card.dart';
 import 'package:trash2cash/features/notification/presentation/widgets/notification_details.dart';
@@ -33,8 +34,9 @@ class _NotificationPageState extends State<NotificationPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(180.h),
+          preferredSize: Size.fromHeight(190.h),
           child: Container(
+            
             decoration: BoxDecoration(color: const Color(0xffFCCC3E)),
             child: SafeArea(
               child: Row(
@@ -49,18 +51,12 @@ class _NotificationPageState extends State<NotificationPage> {
                         },
                         icon: Icon(Ionicons.arrow_back_circle_outline),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: 15.w,
-                          right: 15.w,
-                        ),
-                        child: RText(
-                          title: "Notifications",
-                          style: TextStyle(
-                              fontSize: 20.sp,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600),
-                        ),
+                      RText(
+                        title: "Notifications",
+                        style: TextStyle(
+                            fontSize: 20.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -70,16 +66,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     if (state is NotificationLoadSuccess) {
                       hasUnread = state.notifications.any((n) => !n.isRead);
                     }
-                    // if (state is NotificationMarkAllInProgress) {
-                    //   return Center(
-                    //     child: SizedBox(
-                    //       width: 20.w,
-                    //       height: 20.h,
-                    //       child: CircularProgressIndicator(
-                    //           strokeWidth: 2, color: Color(0xff279B54)),
-                    //     ),
-                    //   );
-                    // }
+                   
                     return Padding(
                     padding: EdgeInsets.only(
                       left: 15.w,
@@ -126,6 +113,7 @@ class _NotificationPageState extends State<NotificationPage> {
                       context
                           .read<NotificationBloc>()
                           .add(FetchNotificationsRequested());
+                          context.read<NotificationBadgeBloc>().add(FetchUnreadCount());
                     },
                     child: const Text('Retry'),
                   )
@@ -145,6 +133,8 @@ class _NotificationPageState extends State<NotificationPage> {
               itemCount: state.notifications.length,
               itemBuilder: (context, index) {
                 final notification = state.notifications[index];
+                
+
 
                 return NotificationCard(
                     icon: _getIconForTitle(notification.title),
@@ -161,29 +151,32 @@ class _NotificationPageState extends State<NotificationPage> {
                             .add(NotificationMarkedAsRead(notification.id));
                       }
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          // Pass the data to the details page
-                          builder: (_) => NotificationDetailsPage(
-                            appBarTitle: notification.title,
-                            mainTitle: _getMainTitle(notification.title),
-                            // recyclerName: '',
-                            // wasteAmount: '',
-                            // wasteType: '',
-                            // wasteId: '',
-                            secondaryText: notification.message,
-                            buttonText: 'View Schedule',
-                            onButtonPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const ViewSchedulePage()),
-                              );
-                            }, // Or another relevant title
-                          ),
-                        ),
-                      );
+
+                      // if()
+
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     // Pass the data to the details page
+                      //     builder: (_) => NotificationDetailsPage(
+                      //       appBarTitle: notification.title,
+                      //       mainTitle: _getMainTitle(notification.title),
+                      //       // recyclerName: '',
+                      //       // wasteAmount: '',
+                      //       // wasteType: '',
+                      //       // wasteId: '',
+                      //       secondaryText: notification.message,
+                      //       buttonText: 'View Schedule',
+                      //       onButtonPressed: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (_) => const ViewSchedulePage()),
+                      //         );
+                      //       }, // Or another relevant title
+                      //     ),
+                      //   ),
+                      // );
                     });
               },
             );

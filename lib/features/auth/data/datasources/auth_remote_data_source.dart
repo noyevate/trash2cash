@@ -29,9 +29,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'email': email, "password": password, "firstName": firstName}),
       );
+
+      print("register statusCode: ${response.statusCode}");
+      print("register: ${response.body}");
+      print("register: ${url}");
+
       if (response.statusCode >= 200 && response.statusCode < 300) {
         await box.write('firstName', firstName);
         await box.write('email', email);
+        await box.write('isLoggedIn', true);
         print(response.body);
         return RegisterResponseModel.fromJson(jsonDecode(response.body));
       } else {
@@ -57,12 +63,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'email': email, "password": password}),
       );
+
+      print("register statusCode: ${response.statusCode}");
+      print("register: ${response.body}");
+      print("register: ${url}");
+
+      
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print(response.body);
          await box.write('email', email);
         LoginResponseModel loginDetails =   LoginResponseModel.fromJson(jsonDecode(response.body));
         box.write("accessToken", loginDetails.accessToken);
         box.write('refreshToken', loginDetails.refreshToken);
+        box.write('isLoggedIn', true);
 
         return loginDetails;
 

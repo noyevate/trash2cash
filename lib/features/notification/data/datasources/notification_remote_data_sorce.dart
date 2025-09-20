@@ -10,6 +10,7 @@ abstract class NotificationRemoteDataSource {
   Future<List<NotificationItemModel>> getNotifications();
   Future<void> markNotificationAsRead(int notificationId);
    Future<void> markAllNotificationsAsRead();
+   Future<int> getUnreadNotificationCount();
  
 }
 
@@ -101,6 +102,38 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       print("notification as mark all read statuscode: ${response.statusCode}");
       if (response.statusCode != 200 && response.statusCode != 204) {
         throw ServerException('Failed to mark all notifications as read. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ServerException('An unexpected error occurred: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<int> getUnreadNotificationCount() async {
+    final token = box.read('accessToken');
+    if (token == null) throw ServerException('Not authenticated.');
+
+    final url = Uri.parse("$appBaseUrl/notifications/unread-count");
+    
+    try {
+      final response = await client.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      print("unreadNotifications url: ${url}");
+      print("unreadNotifications: ${response.body}");
+      print("unreadNotifications statuscode: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        
+        final data = jsonDecode(response.body);
+        return data['unreadNotifications'] as int;
+      } else {
+        throw ServerException('Failed to get unread count. Status: ${response.statusCode}');
       }
     } catch (e) {
       throw ServerException('An unexpected error occurred: ${e.toString()}');

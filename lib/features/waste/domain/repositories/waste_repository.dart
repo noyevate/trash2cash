@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:trash2cash/features/waste/domain/entities/recycler_waste_listing.dart';
 import 'package:trash2cash/features/waste/domain/entities/waste_listing.dart';
 import 'package:trash2cash/features/waste/domain/entities/waste_listing_items.dart';
 
@@ -18,4 +19,5 @@ abstract class WasteRepository {
   });
 
   Future<List<WasteListingItem>> getWasteListings();
+  Future<List<RecyclerWasteListing>> getAllWasteListingsForRecycler();
 }

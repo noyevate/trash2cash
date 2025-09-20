@@ -205,7 +205,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                       ),
                       8.l,
                       RText(
-                          title: "Email Address",
+                          title: "Location",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15.sp,
@@ -214,80 +214,11 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                       CustomForm(
                         darkTheme: false,
                         prefixIcon: null,
-                        hintText: "Enter Email Address",
+                        hintText: "Enter your location",
                         controller: location,
                       ),
                       8.l,
-                      // RText(
-                      //     title: "Pickup Detals",
-                      //     style: TextStyle(
-                      //         color: Colors.black,
-                      //         fontSize: 20.sp,
-                      //         fontWeight: FontWeight.w600)),
-                      // 5.l,
-                      // 8.l,
-                      // RText(
-                      //     title: "Pickup Location",
-                      //     style: TextStyle(
-                      //         color: Colors.black,
-                      //         fontSize: 15.sp,
-                      //         fontWeight: FontWeight.w500)),
-                      // 5.l,
-                      // CustomForm(
-                      //   darkTheme: false,
-                      //   prefixIcon: Icon(
-                      //     Ionicons.location_outline,
-                      //     color: Tcolor.StaticGreenr,
-                      //   ),
-                      //   hintText: "Enter Pickup Location",
-                      //   controller: pickupLocation,
-                      // ),
-                      // BlocConsumer<LocationBloc, LocationState>(
-
-                      //   listener: (context, state) {
-                      //     if (state is LocationLoadSuccess) {
-                      //     // Update the text field when location is successfully fetched
-                      //     pickupLocation.text = state.address;
-                      //     ScaffoldMessenger.of(context).showSnackBar(
-                      //       const SnackBar(
-                      //           content: Text('Location set!'),
-                      //           backgroundColor: Colors.green),
-                      //     );
-                      //   }
-
-                      //    if (state is LocationLoadFailure) {
-                      //     // Show an error message
-                      //     ScaffoldMessenger.of(context).showSnackBar(
-                      //       SnackBar(
-                      //           content: Text(state.error),
-                      //           backgroundColor: Colors.white),
-                      //     );
-                      //   }
-                      // },
-
-                      // builder: (context, state) {
-                      //   final bool isLoading = state is LocationLoadInProgress;
-                      //   return GestureDetector(
-                      //   onTap: isLoading ? null : () => context.read<LocationBloc>().add(GetCurrentLocationRequested()),
-                      //   child: Padding(
-                      //     padding: EdgeInsets.only(left: 30.w),
-                      //     child: Row(
-                      //       children: [
-                      //         Image.asset("images/target.png"),
-                      //         10.b,
-                      //         RText(
-                      //             title: isLoading ? "fetching location" : "Use current location",
-                      //             style: TextStyle(
-                      //                 color: Tcolor.StaticGreenr,
-                      //                 fontSize: 15.sp,
-                      //                 fontWeight: FontWeight.w400)),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // );
-                      // },
-
-                      // ),
+                      
                       10.l,
                       20.l,
                       BlocConsumer<ProfileBloc, ProfileState>(

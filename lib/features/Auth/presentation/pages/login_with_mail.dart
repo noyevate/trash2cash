@@ -105,14 +105,14 @@ class _LoginWithMailState extends State<LoginWithMail> {
                     ),
                   ),
                   10.l,
-                  Center(
-                    child: RText(
-                        title: "Log in to keep turning waste into value.",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w400)),
-                  ),
+                  RText(
+                      title: "Log in to keep turning waste into value.",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w400)
+                          
+                          ),
                   20.l,
                   RText(
                       title: "Email",
@@ -120,7 +120,7 @@ class _LoginWithMailState extends State<LoginWithMail> {
                   CustomForm(
                     darkTheme: false,
                     prefixIcon: null,
-                    hintText: "Enter your name",
+                    hintText: "Enter your email address",
                     controller: emailTextEditingController,
                     validator: (text) {
                       if (text == null || text.isEmpty) {

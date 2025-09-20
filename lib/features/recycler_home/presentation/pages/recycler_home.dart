@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trash2cash/constants/constom_recycler_bottom_nav_bar.dart';
-import 'package:trash2cash/features/recycler_activity/presentation/pages/activity.dart';
+import 'package:trash2cash/features/activity/presentation/pages/activity.dart';
 import 'package:trash2cash/features/recycler_home/presentation/pages/btom_nave_pages/education.dart';
 import 'package:trash2cash/features/recycler_home_dashboard/presentation/pages/home_dashboard.dart';
 import 'package:trash2cash/features/recycler_home/presentation/pages/btom_nave_pages/settings.dart';

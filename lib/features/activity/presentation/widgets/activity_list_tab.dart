@@ -3,11 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:trash2cash/constants/r_text.dart';
 import 'package:trash2cash/features/activity/domain/entities/activity_item.dart';
 import 'package:trash2cash/features/activity/presentation/bloc/activity_bloc.dart';
 import 'package:trash2cash/features/activity/presentation/widgets/activity_card.dart';
 import 'package:intl/intl.dart';
 import 'package:trash2cash/features/activity/presentation/widgets/date_header_widgets.dart'; // For formatting dates
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:trash2cash/features/activity/presentation/widgets/recycler_activity_card.dart';
 
 class ActivityListTab extends StatefulWidget {
   final ActivityType type;
@@ -17,12 +21,16 @@ class ActivityListTab extends StatefulWidget {
   State<ActivityListTab> createState() => _ActivityListTabState();
 }
 
-class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAliveClientMixin {
+class _ActivityListTabState extends State<ActivityListTab>
+    with AutomaticKeepAliveClientMixin {
+  String? _userRole;
+
   @override
   void initState() {
     super.initState();
     // Fetch the data for THIS tab's specific type as soon as it's created.
     // The BLoC's caching logic will prevent re-fetching if the data already exists.
+    _userRole = GetStorage().read<String>('role');
     context.read<ActivityBloc>().add(FetchActivitiesRequested(widget.type));
   }
 
@@ -30,18 +38,19 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
   @override
   bool get wantKeepAlive => true;
 
-   // --- HELPER 1: Group Activities by Day ---
+  // --- HELPER 1: Group Activities by Day ---
   List<Object> _groupActivitiesByDay(List<ActivityItem> activities) {
     if (activities.isEmpty) return [];
 
     // Sort activities from newest to oldest
     activities.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-    
+
     final List<Object> itemsWithHeaders = [];
     DateTime? lastDate;
 
     for (final activity in activities) {
-      final activityDate = DateTime(activity.timestamp.year, activity.timestamp.month, activity.timestamp.day);
+      final activityDate = DateTime(activity.timestamp.year,
+          activity.timestamp.month, activity.timestamp.day);
       if (lastDate == null || activityDate.isBefore(lastDate)) {
         // This is a new day, so add a header
         itemsWithHeaders.add(activityDate);
@@ -52,13 +61,13 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
     }
     return itemsWithHeaders;
   }
-  
+
   // --- HELPER 2: Format the Date for the Header ---
   String _formatDateHeader(DateTime date) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(const Duration(days: 1));
-    
+
     if (date == today) {
       return "Today – ${DateFormat.yMMMMd().format(date)}";
     } else if (date == yesterday) {
@@ -68,11 +77,10 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     super.build(context); // This is required for AutomaticKeepAliveClientMixin
-    
+
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
         // --- Case 1: The BLoC is loading data ---
@@ -90,7 +98,9 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<ActivityBloc>().add(FetchActivitiesRequested(widget.type));
+                    context
+                        .read<ActivityBloc>()
+                        .add(FetchActivitiesRequested(widget.type));
                   },
                   child: const Text('Retry'),
                 )
@@ -98,21 +108,28 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
             ),
           );
         }
-        
+
         // --- Case 3: The BLoC has successfully loaded data ---
         if (state is ActivityLoadSuccess) {
           // Filter the list to only show items relevant to the current tab.
           // This is flexible and works well with the "All" tab.
           final relevantActivities = widget.type == ActivityType.ALL
               ? state.activities
-              : state.activities.where((activity) => activity.type == widget.type).toList();
-          
+              : state.activities
+                  .where((activity) => activity.type == widget.type)
+                  .toList();
+
           if (relevantActivities.isEmpty) {
-            return const Center(child: Text("No activities in this category yet."));
+            return Center(
+              child: RText(
+                title: "No activities in this category yet.",
+                style: TextStyle(color: Colors.grey.shade300),
+              ),
+            );
           }
 
           final groupedItems = _groupActivitiesByDay(relevantActivities);
-          
+
           // return ListView.builder(
           //   padding: EdgeInsets.all(16.w),
           //   itemCount: relevantActivities.length,
@@ -134,7 +151,14 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
                 return DateHeader(dateText: _formatDateHeader(item));
               } else if (item is ActivityItem) {
                 // If the item is an ActivityItem, build an ActivityCard
-                return _buildCardFromActivity(item);
+                if (_userRole == 'RECYCLER') {
+                  return _buildRecyclerCardFromActivity(item);
+                } else {
+                  // Default to the Generator card
+                  return _buildCardFromActivity(item);
+                }
+
+                // return ;
               }
               // Fallback, should not happen
               return const SizedBox.shrink();
@@ -160,17 +184,20 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
             icon: Icons.recycling,
             iconColor: Tcolor.primaryGreen,
             title: activity.title,
-            timestamp: DateFormat.jm().format(activity.timestamp), // e.g., "10:45 AM"
+            timestamp:
+                DateFormat.jm().format(activity.timestamp), // e.g., "10:45 AM"
             statusText: "Paid",
             statusColor: Tcolor.lightGreen,
             description: RichText(
               text: TextSpan(
-                style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.4),
+                style: TextStyle(
+                    fontSize: 15, color: Colors.grey[700], height: 1.4),
                 children: [
                   const TextSpan(text: "A recycler has paid "),
                   TextSpan(
                     text: "₦${details.amount.toStringAsFixed(0)}",
-                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   const TextSpan(text: " for your waste."),
                 ],
@@ -192,7 +219,8 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
             statusColor: Tcolor.lightOrange,
             description: Text(
               "${details.recycler} scheduled pickup for\n${DateFormat.MMMd().add_jm().format(details.scheduledDateTime)}", // e.g., Aug 22, 9:00 AM
-              style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.4),
+              style:
+                  TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.4),
             ),
             buttonText: "View Schedule",
             onButtonPressed: () {},
@@ -201,16 +229,18 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
         break;
       case ActivityType.COMPLETED:
         if (details is CompletedActivityDetails) {
-           return ActivityCard(
+          return ActivityCard(
             icon: Icons.check_circle_outline,
             iconColor: Tcolor.primaryBlue,
             title: activity.title,
-            timestamp: "Yesterday", // You would add logic to format this properly
+            timestamp:
+                "Yesterday", // You would add logic to format this properly
             statusText: "Completed",
             statusColor: Tcolor.lightBlue,
             description: Text(
               "${details.recycler} has confirmed pickup.",
-              style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.4),
+              style:
+                  TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.4),
             ),
             buttonText: "View Invoice",
             onButtonPressed: () {},
@@ -220,7 +250,59 @@ class _ActivityListTabState extends State<ActivityListTab> with AutomaticKeepAli
       default:
         break;
     }
+
     // Return an empty container if the details type is unknown or mismatched
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildRecyclerCardFromActivity(ActivityItem activity) {
+    // Here we can build the new card. The logic will be simpler
+    // as there's only one main design for the recycler's activity feed.
+
+    // We can still check the type to customize the text if needed
+    if (activity.type == ActivityType.PAID) {
+      return RecyclerActivityCard(
+        title: activity.title,
+        timestamp:
+            timeago.format(activity.timestamp), // Using timeago for consistency
+        description: activity.description,
+        onButtonPressed: () {
+          // TODO: Navigate to the schedule pickup page, passing the activity/listing ID
+          print("Schedule Pickup for activity ID: ${activity.title}");
+        },
+      );
+    }
+
+    if (activity.type == ActivityType.SCHEDULED) {
+      return RecyclerActivityCard(
+        title: activity.title,
+        timestamp:
+            timeago.format(activity.timestamp), // Using timeago for consistency
+        description: activity.description,
+        onButtonPressed: () {
+          // TODO: Navigate to the schedule pickup page, passing the activity/listing ID
+          print("Schedule Pickup for activity ID: ${activity.title}");
+        },
+      );
+    }
+
+    if (activity.type == ActivityType.COMPLETED) {
+      return RecyclerActivityCard(
+        title: activity.title,
+        timestamp:
+            timeago.format(activity.timestamp), // Using timeago for consistency
+        description: activity.description,
+        onButtonPressed: () {
+          // TODO: Navigate to the schedule pickup page, passing the activity/listing ID
+          print("Schedule Pickup for activity ID: ${activity.title}");
+        },
+      );
+    }
+
+    // You can add more conditions here for other activity types
+    // a recycler might see, or just have a default.
+
+    // Fallback for other types for now
     return const SizedBox.shrink();
   }
 }

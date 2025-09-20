@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:trash2cash/constants/others.dart';
 import 'package:trash2cash/core/error/exceptions.dart';
+import 'package:trash2cash/features/waste/data/models/recycler_waste_listing_model.dart';
 import 'package:trash2cash/features/waste/data/models/waste_listing_item_model.dart';
 import 'package:trash2cash/features/waste/data/models/waste_listing_models.dart';
 import 'package:trash2cash/features/waste/domain/entities/waste_listing.dart';
@@ -27,6 +28,7 @@ abstract class WasteRemoteDataSource {
   });
 
    Future<List<WasteListingItemModel>> getWasteListings();
+   Future<List<RecyclerWasteListingModel>> getAllWasteListings();
 }
 
 class WasteRemoteDataSourceImpl implements WasteRemoteDataSource {
@@ -105,7 +107,7 @@ class WasteRemoteDataSourceImpl implements WasteRemoteDataSource {
     final token = box.read('accessToken');
     if (token == null) throw ServerException('Not authenticated.');
 
-    final url = Uri.parse("$appBaseUrl/listings"); // Endpoint for getting all listings
+    final url = Uri.parse("$appBaseUrl/listings/me"); // Endpoint for getting all listings
     
     try {
       final response = await client.get(
@@ -133,6 +135,35 @@ class WasteRemoteDataSourceImpl implements WasteRemoteDataSource {
       }
     } catch (e) {
       throw ServerException('An unexpected error occurred: ${e.toString()}');
+    }
+  }
+
+    @override
+  Future<List<RecyclerWasteListingModel>> getAllWasteListings() async {
+    final token = box.read('accessToken');
+    if (token == null) throw ServerException('Not authenticated.');
+
+    // Endpoint for recyclers to get all listings
+    final url = Uri.parse("$appBaseUrl/listings/open"); 
+    
+    try {
+      final response = await client.get(
+        url,
+        headers: { "Authorization": "Bearer $token" },
+      );
+
+       print("token ${token}");
+        print("recycler waste-listing-response ${response.body}");
+        print("recycler waste-listing-statuscode ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => RecyclerWasteListingModel.fromJson(json)).toList();
+      } else {
+        throw ServerException('Failed to load all listings. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
     }
   }
 }

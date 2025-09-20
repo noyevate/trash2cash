@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:trash2cash/core/error/exceptions.dart';
 import 'package:trash2cash/features/waste/data/datasources/waste_listing_remote_data_source.dart';
+import 'package:trash2cash/features/waste/domain/entities/recycler_waste_listing.dart';
 import 'package:trash2cash/features/waste/domain/entities/waste_listing.dart';
 import 'package:trash2cash/features/waste/domain/entities/waste_listing_items.dart';
 import 'package:trash2cash/features/waste/domain/repositories/waste_repository.dart';
@@ -51,6 +52,15 @@ class WasteRepositoryImpl implements WasteRepository {
   Future<List<WasteListingItem>> getWasteListings() {
     try {
       return remoteDataSource.getWasteListings();
+    } on ServerException {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<RecyclerWasteListing>> getAllWasteListingsForRecycler() {
+    try {
+      return remoteDataSource.getAllWasteListings();
     } on ServerException {
       rethrow;
     }

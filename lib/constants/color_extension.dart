@@ -14,7 +14,7 @@ class Tcolor {
   static Color get RecyclerGreyCard => const Color(0xffF5F5F5);
   static Color get ActivityBorder => const Color(0xffD1D5DC);
   static Color get ActivityUnelectedFill => const Color.fromARGB(110, 231, 236, 244);
+  static Color get MoneyColor => const Color(0xff081F11);
   
 }
-
 
